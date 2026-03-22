@@ -27,7 +27,7 @@ const Dashboard = () => {
       const res = await sensorService.postData({
         heartRate: Number(form.heartRate),
         gsrValue: Number(form.gsrValue),
-        stressLevel: form.stressLevel,
+        stressLevel: '',
       });
       setSensorData(res.data);
       toast({ title: 'Data submitted', description: 'Sensor data recorded successfully.' });
