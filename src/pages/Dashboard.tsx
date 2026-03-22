@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Heart, Zap, Brain, History, Send } from 'lucide-react';
+import { Heart, Zap, Brain, History, Send, Play } from 'lucide-react';
 
 const Dashboard = () => {
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
