@@ -38,6 +38,18 @@ const Dashboard = () => {
     }
   };
 
+  const handleStart = async () => {
+    setStarting(true);
+    try {
+      await sensorService.start();
+      toast({ title: 'Sensor Started', description: 'Hardware is now taking readings.' });
+    } catch {
+      toast({ title: 'Error', description: 'Failed to start sensor.', variant: 'destructive' });
+    } finally {
+      setStarting(false);
+    }
+  };
+
   const isHigh = sensorData?.stressLevel === 'HIGH';
 
   return (
