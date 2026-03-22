@@ -11,7 +11,8 @@ import { Heart, Zap, Brain, History, Send, Play } from 'lucide-react';
 
 const Dashboard = () => {
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
-  const [form, setForm] = useState({ heartRate: '', gsrValue: '', stressLevel: 'NORMAL' });
+  const [form, setForm] = useState({ heartRate: '', gsrValue: '' });
+  const [starting, setStarting] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
