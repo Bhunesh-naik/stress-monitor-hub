@@ -59,9 +59,14 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">Real-time stress monitoring overview</p>
         </div>
-        <Button variant="outline" onClick={() => navigate('/history')}>
-          <History className="mr-2 h-4 w-4" /> View History
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleStart} disabled={starting} variant="default">
+            <Play className="mr-2 h-4 w-4" /> {starting ? 'Starting...' : 'Start Sensor'}
+          </Button>
+          <Button variant="outline" onClick={() => navigate('/history')}>
+            <History className="mr-2 h-4 w-4" /> View History
+          </Button>
+        </div>
       </div>
 
       {/* Sensor Cards */}
