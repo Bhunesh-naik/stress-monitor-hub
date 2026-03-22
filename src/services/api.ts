@@ -20,6 +20,7 @@ export interface SensorData {
 }
 
 export const sensorService = {
+  start: () => api.get<string>('/sensor/start'),
   postData: (data: Omit<SensorData, 'id'>) =>
     api.post<SensorData>('/sensor/data', data),
   getHistory: () =>

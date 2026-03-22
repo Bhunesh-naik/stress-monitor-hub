@@ -121,7 +121,7 @@ const Dashboard = () => {
           <CardTitle className="text-lg">Submit Sensor Data</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div className="space-y-2">
               <Label htmlFor="heartRate">Heart Rate</Label>
               <Input id="heartRate" type="number" placeholder="e.g. 102" value={form.heartRate} onChange={update('heartRate')} required />
@@ -130,22 +130,11 @@ const Dashboard = () => {
               <Label htmlFor="gsrValue">GSR Value</Label>
               <Input id="gsrValue" type="number" placeholder="e.g. 650" value={form.gsrValue} onChange={update('gsrValue')} required />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="stressLevel">Stress Level</Label>
-              <select
-                id="stressLevel"
-                value={form.stressLevel}
-                onChange={update('stressLevel')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                <option value="NORMAL">NORMAL</option>
-                <option value="HIGH">HIGH</option>
-              </select>
-            </div>
             <Button type="submit" disabled={loading}>
               <Send className="mr-2 h-4 w-4" /> {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
+          <p className="text-xs text-muted-foreground mt-3">Stress level is calculated automatically by the backend.</p>
         </CardContent>
       </Card>
     </div>
