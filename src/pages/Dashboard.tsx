@@ -7,11 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Heart, Zap, Brain, History, Send } from 'lucide-react';
+import { Heart, Zap, Brain, History, Send, Play } from 'lucide-react';
 
 const Dashboard = () => {
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
-  const [form, setForm] = useState({ heartRate: '', gsrValue: '', stressLevel: 'NORMAL' });
+  const [form, setForm] = useState({ heartRate: '', gsrValue: '' });
+  const [starting, setStarting] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -26,7 +27,7 @@ const Dashboard = () => {
       const res = await sensorService.postData({
         heartRate: Number(form.heartRate),
         gsrValue: Number(form.gsrValue),
-        stressLevel: form.stressLevel,
+        stressLevel: '',
       });
       setSensorData(res.data);
       toast({ title: 'Data submitted', description: 'Sensor data recorded successfully.' });
@@ -34,6 +35,18 @@ const Dashboard = () => {
       toast({ title: 'Error', description: 'Failed to submit sensor data.', variant: 'destructive' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleStart = async () => {
+    setStarting(true);
+    try {
+      await sensorService.start();
+      toast({ title: 'Sensor Started', description: 'Hardware is now taking readings.' });
+    } catch {
+      toast({ title: 'Error', description: 'Failed to start sensor.', variant: 'destructive' });
+    } finally {
+      setStarting(false);
     }
   };
 
@@ -46,9 +59,14 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">Real-time stress monitoring overview</p>
         </div>
-        <Button variant="outline" onClick={() => navigate('/history')}>
-          <History className="mr-2 h-4 w-4" /> View History
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleStart} disabled={starting} variant="default">
+            <Play className="mr-2 h-4 w-4" /> {starting ? 'Starting...' : 'Start Sensor'}
+          </Button>
+          <Button variant="outline" onClick={() => navigate('/history')}>
+            <History className="mr-2 h-4 w-4" /> View History
+          </Button>
+        </div>
       </div>
 
       {/* Sensor Cards */}
@@ -103,7 +121,7 @@ const Dashboard = () => {
           <CardTitle className="text-lg">Submit Sensor Data</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div className="space-y-2">
               <Label htmlFor="heartRate">Heart Rate</Label>
               <Input id="heartRate" type="number" placeholder="e.g. 102" value={form.heartRate} onChange={update('heartRate')} required />
@@ -112,22 +130,11 @@ const Dashboard = () => {
               <Label htmlFor="gsrValue">GSR Value</Label>
               <Input id="gsrValue" type="number" placeholder="e.g. 650" value={form.gsrValue} onChange={update('gsrValue')} required />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="stressLevel">Stress Level</Label>
-              <select
-                id="stressLevel"
-                value={form.stressLevel}
-                onChange={update('stressLevel')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                <option value="NORMAL">NORMAL</option>
-                <option value="HIGH">HIGH</option>
-              </select>
-            </div>
             <Button type="submit" disabled={loading}>
               <Send className="mr-2 h-4 w-4" /> {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
+          <p className="text-xs text-muted-foreground mt-3">Stress level is calculated automatically by the backend.</p>
         </CardContent>
       </Card>
     </div>
